@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Василий Шубин](https://up.htmlacademy.ru/javascript/11/user/334301).
-* Наставник: `Неизвестно`.
+* Наставник: `Николай Загорный`.
 
 ---
 
