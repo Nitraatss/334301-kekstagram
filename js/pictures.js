@@ -1,11 +1,17 @@
 'use strict';
 
 // Возвращает случайное число между min (включительно) и max (не включая max)
-function getRandomArbitrary(min, max) {
+var getRandomArbitrary = function (min, max) {
   return Math.floor(Math.random() * (max - min) + min);
-}
+};
+
+// создание DOM элемента
+var creatDOMElement = function (root, elementName) {
+  return root.querySelector(elementName);
+};
+
 // Создание массива из 25 объектов с описанием фото
-function generatePhotosData(comments) {
+var generatePhotosData = function (comments) {
   var dataArray = [];
   var comment = [];
 
@@ -27,15 +33,10 @@ function generatePhotosData(comments) {
   }
 
   return dataArray;
-}
-
-// создание DOM элемента
-function creatDOMElement(root, elementName) {
-  return root.querySelector(elementName);
-}
+};
 
 // генерирование шаблона фото
-function generatePhoto(data) {
+var generatePhoto = function (data) {
   var picture = pictureTemplate.cloneNode(true);
 
   creatDOMElement(picture, '.picture-comments').textContent = data.comments;
@@ -43,13 +44,76 @@ function generatePhoto(data) {
   creatDOMElement(picture, 'img').src = data.url;
 
   return picture;
-}
-// заполнение gallery-overlay данными из первого элемента массива
-function getOverlay(photos) {
-  galleryOverlay.querySelector('.comments-count').textContent = photos.comments.length;
-  galleryOverlay.querySelector('.likes-count').textContent = photos.likes;
-  galleryOverlay.querySelector('.gallery-overlay-image').src = photos.url;
-}
+};
+
+// отображение фото в поноэкранном режиме
+var showGalleryOverlay = function () {
+  galleryOverlay.classList.remove('hidden');
+};
+
+// отключение отображения фото в поноэкранном режиме
+var hideGalleryOverlay = function () {
+  galleryOverlay.classList.add('hidden');
+};
+
+// заполнение формы в полноэкранном режиме данными о фото
+var fillGalleryOverlay = function (target, nextSibling) {
+  creatDOMElement(galleryOverlay, '.gallery-overlay-image').src = target.src;
+  creatDOMElement(galleryOverlay, '.comments-count').textContent = creatDOMElement(nextSibling, '.picture-comments').textContent.split('. ').length;
+  creatDOMElement(galleryOverlay, '.likes-count').textContent = creatDOMElement(nextSibling, '.picture-likes').textContent;
+};
+
+// вывод фото на полный экран по клику
+var onPictureClick = function (event) {
+  // отменяем действие браузера при нажатии на ссылку
+  event.preventDefault();
+
+  var target = event.target;
+
+  // при нажатии на картинку
+  if (target.tagName === 'IMG') {
+    // получаем данные о фото из следующего "брата" .picture-stats
+    var nextSibling = target.nextElementSibling;
+
+    // заполняем
+    fillGalleryOverlay(target, nextSibling);
+
+    // отображаем
+    showGalleryOverlay();
+
+    // при клике на span с комментариями
+  } else if (target.tagName === 'SPAN') {
+    // получаем данные о фото
+    // находим picture
+    var root = event.path[2];
+    // находим img для информации о пути к фото
+    var image = root.querySelector('img');
+    // находим .picture-stats для дополнительной информции
+    var span = image.nextElementSibling;
+
+    fillGalleryOverlay(image, span);
+
+    showGalleryOverlay();
+  }
+};
+
+// вывод фото на полный экран при нажатии Enter
+var onEnterPress = function (event) {
+  if (event.keyCode === ENTER_KEYCODE) {
+    event.preventDefault();
+
+    var target = event.target;
+    var image = target.children[0];
+    var span = image.nextElementSibling;
+
+    fillGalleryOverlay(image, span);
+
+    showGalleryOverlay();
+  }
+};
+
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
 
 // массив комментариев
 var sentences = [
@@ -60,24 +124,52 @@ var sentences = [
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
+
 // массив хранящий информацию о фотографиях
 var photos = generatePhotosData(sentences);
 
 // создание DOM элементов #picture-template и .pictures
 var pictureTemplate = creatDOMElement(document, '#picture-template').content;
-var photo = creatDOMElement(document, '.pictures');
+var pictures = creatDOMElement(document, '.pictures');
+var galleryOverlay = creatDOMElement(document, '.gallery-overlay');
+var galleryOverlayClose = creatDOMElement(galleryOverlay, '.gallery-overlay-close');
 
 var fragment = document.createDocumentFragment();
 
 for (var l = 0; l < 25; l++) {
   fragment.appendChild(generatePhoto(photos[l]));
+
 }
 
-photo.appendChild(fragment);
+pictures.appendChild(fragment);
 
-var galleryOverlay = creatDOMElement(document, '.gallery-overlay');
 
-getOverlay(photos[0]);
+var picture = pictures.querySelectorAll('.picture');
 
-// отображения элемента .gallery-overlay
-galleryOverlay.classList.remove('hidden');
+// отображение фото в полноэкранном режиме по клику и по нажатие enter
+for (var i = 0; i < picture.length; i++) {
+  picture[i].addEventListener('click', onPictureClick);
+  picture[i].addEventListener('keydown', onEnterPress);
+}
+
+// отключение полноэкранного режима по нажатию Esc
+document.addEventListener('keydown', function () {
+  if (event.keyCode === ESC_KEYCODE) {
+    hideGalleryOverlay();
+  }
+}
+);
+
+// отключение полноэкранного режима при нажатии на крестик
+galleryOverlayClose.addEventListener('click', function () {
+  hideGalleryOverlay();
+}
+);
+
+// отключение полноэкранного режима при выборе крестика и нажтии Enter
+galleryOverlayClose.addEventListener('keydown', function () {
+  if (event.keyCode === ENTER_KEYCODE) {
+    hideGalleryOverlay();
+  }
+}
+);
