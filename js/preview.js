@@ -79,9 +79,6 @@
   document.addEventListener('keydown', function (event) {
     if (event.keyCode === window.data.ESC_KEYCODE) {
       hideGalleryOverlay();
-      // if (event.target !== uploadDescription) {
-      // hideUploadOverlay();
-      // }
     }
   }
   );
