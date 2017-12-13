@@ -14,16 +14,15 @@
   // заполнение формы в полноэкранном режиме данными о фото
   var fillGalleryOverlay = function (target, nextSibling) {
     window.data.creatDOMElement(window.gallery.galleryOverlay, '.gallery-overlay-image').src = target.src;
-    window.data.creatDOMElement(window.gallery.galleryOverlay, '.comments-count').textContent = window.data.creatDOMElement(nextSibling, '.picture-comments').textContent.split('. ').length;
+    window.data.creatDOMElement(window.gallery.galleryOverlay, '.comments-count').textContent = window.data.creatDOMElement(nextSibling, '.picture-comments').textContent.split('  ').length;
     window.data.creatDOMElement(window.gallery.galleryOverlay, '.likes-count').textContent = window.data.creatDOMElement(nextSibling, '.picture-likes').textContent;
   };
 
   // вывод фото на полный экран по клику
-  var onPictureClick = function (event) {
+  var onPictureClick = function (cEvent) {
     // отменяем действие браузера при нажатии на ссылку
-    event.preventDefault();
-
-    var target = event.target;
+    cEvent.preventDefault();
+    var target = cEvent.target;
 
     // при нажатии на картинку
     if (target.tagName === 'IMG') {
@@ -40,7 +39,7 @@
     } else if (target.tagName === 'SPAN') {
       // получаем данные о фото
       // находим picture
-      var root = event.path[2];
+      var root = cEvent.path[2];
       // находим img для информации о пути к фото
       var image = root.querySelector('img');
       // находим .picture-stats для дополнительной информции
@@ -53,11 +52,11 @@
   };
 
   // вывод фото на полный экран при нажатии Enter
-  var onEnterPress = function (event) {
-    if (event.keyCode === window.data.ENTER_KEYCODE) {
-      event.preventDefault();
+  var onEnterPress = function (eEvent) {
+    if (eEvent.keyCode === window.data.ENTER_KEYCODE) {
+      eEvent.preventDefault();
 
-      var target = event.target;
+      var target = eEvent.target;
       var image = target.children[0];
       var span = image.nextElementSibling;
 
@@ -67,13 +66,10 @@
     }
   };
 
-  var picture = window.gallery.pictures.querySelectorAll('.picture');
-
   // отображение фото в полноэкранном режиме по клику и по нажатие enter
-  for (var i = 0; i < picture.length; i++) {
-    picture[i].addEventListener('click', onPictureClick);
-    picture[i].addEventListener('keydown', onEnterPress);
-  }
+  window.gallery.pictures.addEventListener('click', onPictureClick);
+  window.gallery.pictures.addEventListener('keydown', onEnterPress);
+
 
   // отключение полноэкранного режима фото и формы загрузки по нажатию Esc
   document.addEventListener('keydown', function (event) {
