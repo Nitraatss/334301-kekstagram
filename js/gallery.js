@@ -10,17 +10,21 @@
     galleryOverlayClose: window.data.creatDOMElement(document, '.gallery-overlay-close')
   };
 
+  window.backend.load(
+      // вывод 25 изображений
+      function (serverData) {
+        var fragment = document.createDocumentFragment();
 
-  // массив хранящий информацию о фотографиях
-  var photos = window.data.generatePhotosData();
+        for (var l = 0; l < 25; l++) {
+          fragment.appendChild(window.picture.generatePhoto(serverData[l]));
+        }
 
-  var fragment = document.createDocumentFragment();
-
-  for (var l = 0; l < 25; l++) {
-    fragment.appendChild(window.picture.generatePhoto(photos[l]));
-
-  }
-
-  window.gallery.pictures.appendChild(fragment);
+        window.gallery.pictures.appendChild(fragment);
+      },
+      // вывод информации об ошибке
+      function (errorMessage) {
+        window.data.showError(errorMessage);
+      }
+  );
 })();
 

@@ -13,37 +13,26 @@
       return root.querySelector(elementName);
     },
 
-    // создание 25 фото
-    generatePhotosData: function () {
-      var dataArray = [];
-      var comments = [
-        'Всё отлично!',
-        'В целом всё неплохо. Но не всё.',
-        'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
-        'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
-        'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
-        'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
-      ];
-      var comment = [];
+    // форма для сообщения об ошибке
+    showError: function (errorMessage) {
+      var node = document.createElement('canvas');
+      node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: darkred;';
+      node.style.position = 'absolute';
+      node.style.left = 0;
+      node.style.right = 0;
+      node.width = 500;
+      node.style.fontSize = '30px';
 
-      for (var i = 0; i < 25; i++) {
-        var k = i + 1;
-        var url = 'photos/' + k + '.jpg';
-        var likes = window.data.getRandomArbitrary(15, 201);
+      node.textContent = errorMessage;
+      document.body.insertAdjacentElement('afterbegin', node);
 
-        var commentsNumber = window.data.getRandomArbitrary(0, 3);
-        for (var j = 0; j < commentsNumber; j++) {
-          comment[j] = comments[window.data.getRandomArbitrary(0, 6)];
-        }
+      var ctx = node.getContext('2d');
 
-        dataArray[i] = {
-          url: url,
-          likes: likes,
-          comments: comment
-        };
-      }
-
-      return dataArray;
+      // Текст сообщения
+      ctx.fillStyle = 'white';
+      ctx.font = '16px Arial';
+      ctx.textBaseline = 'hanging';
+      ctx.fillText(errorMessage, 40, 50);
     },
 
     ESC_KEYCODE: 27,

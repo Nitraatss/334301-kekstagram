@@ -100,7 +100,19 @@
   );
 
   // отправка формы по клику
-  uploadSubmit.addEventListener('click', function () {
+  uploadSubmit.addEventListener('click', function (subEvent) {
+    subEvent.preventDefault();
+
+    window.backend.save(
+        new FormData(window.form.formUploadSelectImage()),
+        function () {
+          hideUploadOverlay();
+        },
+        function (errorMessage) {
+          window.data.showError(errorMessage);
+        }
+    );
+
     checkUploadHashtags();
   }
   );
