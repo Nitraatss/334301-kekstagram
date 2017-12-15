@@ -93,16 +93,15 @@
     }
   };
 
+  window.galleryFilters = {
+    galleryFiltersForm: window.data.creatDOMElement(document, '.filters')
+  };
   // DOM элементы формы с фильтрами
-  var galleryFiltersForm = window.data.creatDOMElement(document, '.filters');
-  var recommended = window.data.creatDOMElement(galleryFiltersForm, '#filter-recommend');
-  var popular = window.data.creatDOMElement(galleryFiltersForm, '#filter-popular');
-  var discussed = window.data.creatDOMElement(galleryFiltersForm, '#filter-discussed');
-  var random = window.data.creatDOMElement(galleryFiltersForm, '#filter-random');
-
-  // включение отображения фильтров
-  galleryFiltersForm.classList.remove('filters-inactive');
+  var recommended = window.data.creatDOMElement(window.galleryFilters.galleryFiltersForm, '#filter-recommend');
+  var popular = window.data.creatDOMElement(window.galleryFilters.galleryFiltersForm, '#filter-popular');
+  var discussed = window.data.creatDOMElement(window.galleryFilters.galleryFiltersForm, '#filter-discussed');
+  var random = window.data.creatDOMElement(window.galleryFilters.galleryFiltersForm, '#filter-random');
 
   // обработчик событий на изменение состояния чекбокса
-  galleryFiltersForm.addEventListener('change', onFilterChange);
+  window.galleryFilters.galleryFiltersForm.addEventListener('change', onFilterChange);
 })();

@@ -33,6 +33,9 @@
 
         // отображение фото
         window.gallery.generateGallery(serverData);
+
+        // включение отображения фильтров
+        window.galleryFilters.galleryFiltersForm.classList.remove('filters-inactive');
       },
       // вывод информации об ошибке
       function (errorMessage) {
