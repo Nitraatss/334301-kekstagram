@@ -100,6 +100,9 @@
 
     if (errors === 0) {
       uploadHashtags.setCustomValidity('');
+      uploadHashtags.style.backgroundColor = 'green';
+    } else {
+      uploadHashtags.style.backgroundColor = 'red';
     }
 
     return errors;
@@ -114,6 +117,9 @@
   var uploadFormPreview = window.data.creatDOMElement(window.form.uploadOverlay(), '.upload-form-preview');
   var imgOnPreview = window.data.creatDOMElement(uploadFormPreview, 'img');
   var effectPreview = document.querySelectorAll('.upload-effect-preview');
+
+  // для теста, проверка хэштегов при вводе
+  uploadHashtags.addEventListener('input', checkUploadHashtags);
 
   uploadForm.dropzone = 'move';
   var draggedItem = null;
