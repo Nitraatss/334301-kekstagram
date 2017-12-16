@@ -12,7 +12,11 @@
         pictureComments.textContent = pictureComments.textContent + '  ' + data.comments[i];
       }
       window.data.creatDOMElement(picture, '.picture-likes').textContent = data.likes;
-      window.data.creatDOMElement(picture, 'img').src = data.url;
+      window.data.creatDOMElement(picture, 'a').draggable = 'true';
+      var newImage = window.data.creatDOMElement(picture, 'img');
+      newImage.src = data.url;
+      newImage.draggable = 'true';
+      newImage.dropzone = 'move';
 
       return picture;
     }
