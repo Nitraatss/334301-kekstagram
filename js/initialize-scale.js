@@ -32,7 +32,7 @@
     resizeValue.value = resize + '%';
   };
 
-  var previewPhoto = window.form.effectPreview();
+  var previewPhoto = window.form.effectImagePreview();
   var resizeButtonInc = window.data.creatDOMElement(window.form.uploadOverlay(), '.upload-resize-controls-button-inc');
   var resizeButtonDec = window.data.creatDOMElement(window.form.uploadOverlay(), '.upload-resize-controls-button-dec');
   var resizeValue = window.data.creatDOMElement(window.form.uploadOverlay(), '.upload-resize-controls-value');

@@ -60,6 +60,7 @@
   var effectPin = window.data.creatDOMElement(effectControls, '.upload-effect-level-pin');
   var effectValLine = window.data.creatDOMElement(effectControls, '.upload-effect-level-val');
 
+  effectValue.disabled = true;
   var maxX;
   var effectName;
   var oldEffect = null;
@@ -124,13 +125,13 @@
 
   // наложение эффектов на фото
   var uploadEffect = window.form.uploadEffect();
-  var photoPreview = window.form.effectPreview();
+  var photoPreview = window.form.effectImagePreview();
 
   uploadEffect.addEventListener('click', function (eEvent) {
     if (eEvent.target.type === 'radio') {
       window.initializeFilters.deleteEffect(photoPreview, oldEffect);
 
-      photoPreview.classList = 'upload-form-preview';
+      photoPreview.classList = 'effect-image-preview';
       effectName = eEvent.target.id.substring(7);
       oldEffect = effectName;
       photoPreview.classList.add(effectName);
@@ -148,7 +149,7 @@
         window.initializeFilters.changeTargetFilter(afterEffectImage, effectName, effectValue.value);
       } else {
         effectsLevel.classList.add('hidden');
-
+        photoPreview.classList.remove(effectName);
         window.initializeFilters.changeTargetFilter(afterEffectImage, effectName, effectValue.value);
       }
     }

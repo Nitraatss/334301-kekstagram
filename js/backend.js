@@ -27,7 +27,6 @@
       loadXHR.timeout = 10000;
       loadXHR.open('GET', loadURL);
       loadXHR.send();
-
     },
     // сохранение данных на сервер
     save: function (data, onLoad, onError) {
@@ -50,5 +49,4 @@
       saveXHR.send(data);
     }
   };
-
 })();
