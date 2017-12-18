@@ -54,6 +54,9 @@
     window.initializeScale.changeTargetScale(window.form.effectImagePreview(), 55);
     window.data.creatDOMElement(document, '#upload-effect-none').checked = true;
     window.data.creatDOMElement(document, '.upload-effect-level').classList.add('hidden');
+
+    // отправка формы по клику
+    uploadSubmit.addEventListener('click', onSubmitClick);
   };
 
   // проверка хэш-тегов
@@ -100,12 +103,28 @@
 
     if (errors === 0) {
       uploadHashtags.setCustomValidity('');
-      uploadHashtags.style.backgroundColor = 'green';
-    } else {
-      uploadHashtags.style.backgroundColor = 'red';
     }
 
     return errors;
+  };
+
+  // отправка формы по клику и проверка хэштегов
+  var onSubmitClick = function (subEvent) {
+    subEvent.preventDefault();
+    if (!checkUploadHashtags()) {
+      window.backend.save(
+          new FormData(window.form.formUploadSelectImage()),
+          function () {
+            hideUploadOverlay();
+          },
+          function (errorMessage) {
+            window.data.showError(errorMessage);
+          });
+      uploadSubmit.removeEventListener('click', onSubmitClick);
+
+    } else {
+      window.form.formUploadSelectImage().reportValidity();
+    }
   };
 
   var uploadForm = window.form.formUploadSelectImage();
@@ -117,9 +136,6 @@
   var uploadFormPreview = window.data.creatDOMElement(window.form.uploadOverlay(), '.upload-form-preview');
   var imgOnPreview = window.data.creatDOMElement(uploadFormPreview, 'img');
   var effectPreview = document.querySelectorAll('.upload-effect-preview');
-
-  // для теста, проверка хэштегов при вводе
-  uploadHashtags.addEventListener('input', checkUploadHashtags);
 
   uploadForm.dropzone = 'move';
   var draggedItem = null;
@@ -146,28 +162,13 @@
     if (draggedItem) {
       // отображение перенесенного изображения из галереи в превью
       imgOnPreview.src = draggedItem.src;
-
       // изменение мини-превью эффектов
       effectPreview.forEach(function (element) {
         element.style.backgroundImage = 'url(\'' + draggedItem.src + '\')';
       });
     } else {
-      // отобажение изображеняи перенеснного из компьютера
-      var reader = new FileReader();
-      var file = ddrop.dataTransfer.files[0];
-
-      reader.onloadend = function () {
-        imgOnPreview.src = reader.result;
-
-        // изменение мини-превью эффектов
-        effectPreview.forEach(function (element) {
-          element.style.backgroundImage = 'url(\'' + reader.result + '\')';
-        });
-      };
-
-      if (file) {
-        reader.readAsDataURL(file);
-      }
+      // перетаскивание файла с рабочего стола
+      fieldUploadFile.files = ddrop.dataTransfer.files;
     }
   });
 
@@ -188,21 +189,6 @@
 
     if (file) {
       reader.readAsDataURL(file);
-    }
-  });
-
-  // отправка формы по клику
-  uploadSubmit.addEventListener('click', function (subEvent) {
-    subEvent.preventDefault();
-    if (!checkUploadHashtags()) {
-      window.backend.save(
-          new FormData(window.form.formUploadSelectImage()),
-          function () {
-            hideUploadOverlay();
-          },
-          function (errorMessage) {
-            window.data.showError(errorMessage);
-          });
     }
   });
 }

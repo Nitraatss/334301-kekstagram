@@ -16,7 +16,6 @@
       var newImage = window.data.creatDOMElement(picture, 'img');
       newImage.src = data.url;
       newImage.draggable = 'true';
-      newImage.dropzone = 'move';
 
       return picture;
     }
