@@ -142,9 +142,11 @@
 
   // перетаскивание изображений из галереи
   window.gallery.pictures.addEventListener('dragstart', function (dstart) {
-    if (dstart.target.tagName === 'IMG') {
+    if (dstart.target.tagName === 'IMG' || dstart.target.tagName === 'A') {
       draggedItem = dstart.target;
       dstart.dataTransfer.setData('text/plain', dstart.target.alt);
+    } else {
+      draggedItem = null;
     }
   });
 
@@ -160,15 +162,12 @@
     showUploadOverlay();
 
     if (draggedItem) {
-      // отображение перенесенного изображения из галереи в превью
-      imgOnPreview.src = draggedItem.src;
-      // изменение мини-превью эффектов
-      effectPreview.forEach(function (element) {
-        element.style.backgroundImage = 'url(\'' + draggedItem.src + '\')';
-      });
+      hideUploadOverlay();
+      ddrop.dataTransfer.clearData();
     } else {
       // перетаскивание файла с рабочего стола
       fieldUploadFile.files = ddrop.dataTransfer.files;
+      ddrop.dataTransfer.clearData();
     }
   });
 
