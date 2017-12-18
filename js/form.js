@@ -16,10 +16,24 @@
     }
   };
 
+  // включение отображения формы загрузки
+  var showUploadOverlay = function () {
+    window.form.uploadOverlay().classList.remove('hidden');
+
+    // закрытие формы загрузки при нажатии на крестик
+    uploadCancel.addEventListener('click', onCancelClick);
+    // отключение полноэкранного формы загрузки по нажатию Esc
+    document.addEventListener('keydown', onKeyESC);
+    // отправка формы по клику
+    uploadSubmit.addEventListener('click', onSubmitClick);
+    uploadHashtags.addEventListener('input', onHashtagsInput);
+  };
+
   // отключение отображения формы загрузки
   var hideUploadOverlay = function () {
+    setDefaultParams();
     window.form.uploadOverlay().classList.add('hidden');
-    uploadForm.reset();
+
     document.removeEventListener('keydown', onKeyESC);
     document.removeEventListener('click', onCancelClick);
   };
@@ -34,30 +48,48 @@
     hideUploadOverlay();
   };
 
-  // включение отображения формы загрузки
-  var showUploadOverlay = function () {
-    window.form.uploadOverlay().classList.remove('hidden');
-
-    // закрытие формы загрузки при нажатии на крестик
-    uploadCancel.addEventListener('click', onCancelClick);
-
-    // отключение полноэкранного формы загрузки по нажатию Esc
-    document.addEventListener('keydown', onKeyESC);
-
+  var setDefaultParams = function () {
     // значения по умолчанию
+    fieldUploadFile.value = '';
     imgOnPreview.classList = 'effect-image-preview';
     imgOnPreview.style.filter = null;
     imgOnPreview.src = '#';
+
     effectPreview.forEach(function (element) {
       element.style.backgroundImage = '#';
     });
+
     window.initializeScale.changeTargetScale(window.form.effectImagePreview(), 55);
     window.data.creatDOMElement(document, '#upload-effect-none').checked = true;
     window.data.creatDOMElement(document, '.upload-effect-level').classList.add('hidden');
-
-    // отправка формы по клику
-    uploadSubmit.addEventListener('click', onSubmitClick);
   };
+
+  // отправка формы по клику и проверка хэштегов
+  var onSubmitClick = function (subEvent) {
+    subEvent.preventDefault();
+
+    if (!checkUploadHashtags()) {
+      window.backend.save(
+          new FormData(window.form.formUploadSelectImage()),
+          function () {
+            hideUploadOverlay();
+          },
+          function (errorMessage) {
+            window.data.showError(errorMessage);
+          });
+
+      uploadSubmit.removeEventListener('click', onSubmitClick);
+      uploadHashtags.removeEventListener('input', onHashtagsInput);
+    } else {
+      window.form.formUploadSelectImage().reportValidity();
+    }
+  };
+
+  var onHashtagsInput = function () {
+    uploadHashtags.setCustomValidity('');
+    window.form.formUploadSelectImage().reportValidity();
+  };
+
 
   // проверка хэш-тегов
   var checkUploadHashtags = function () {
@@ -108,25 +140,6 @@
     return errors;
   };
 
-  // отправка формы по клику и проверка хэштегов
-  var onSubmitClick = function (subEvent) {
-    subEvent.preventDefault();
-    if (!checkUploadHashtags()) {
-      window.backend.save(
-          new FormData(window.form.formUploadSelectImage()),
-          function () {
-            hideUploadOverlay();
-          },
-          function (errorMessage) {
-            window.data.showError(errorMessage);
-          });
-      uploadSubmit.removeEventListener('click', onSubmitClick);
-
-    } else {
-      window.form.formUploadSelectImage().reportValidity();
-    }
-  };
-
   var uploadForm = window.form.formUploadSelectImage();
   var fieldUploadFile = window.data.creatDOMElement(uploadForm, '#upload-file');
   var uploadCancel = window.data.creatDOMElement(window.form.uploadOverlay(), '.upload-form-cancel');
@@ -138,17 +151,6 @@
   var effectPreview = document.querySelectorAll('.upload-effect-preview');
 
   uploadForm.dropzone = 'move';
-  var draggedItem = null;
-
-  // перетаскивание изображений из галереи
-  window.gallery.pictures.addEventListener('dragstart', function (dstart) {
-    if (dstart.target.tagName === 'IMG' || dstart.target.tagName === 'A') {
-      draggedItem = dstart.target;
-      dstart.dataTransfer.setData('text/plain', dstart.target.alt);
-    } else {
-      draggedItem = null;
-    }
-  });
 
   // разрешаем перетаскивание в поле загрузки
   uploadForm.addEventListener('dragover', function (dover) {
@@ -159,15 +161,10 @@
   // сброс элемента
   uploadForm.addEventListener('drop', function (ddrop) {
     ddrop.preventDefault();
-    showUploadOverlay();
 
-    if (draggedItem) {
-      hideUploadOverlay();
-      ddrop.dataTransfer.clearData();
-    } else {
-      // перетаскивание файла с рабочего стола
+    if (ddrop.dataTransfer.files) {
+      // сохраняем файл перенесенный с рабочего стола в поле файлов
       fieldUploadFile.files = ddrop.dataTransfer.files;
-      ddrop.dataTransfer.clearData();
     }
   });
 
@@ -177,9 +174,9 @@
     var reader = new FileReader();
     var file = fieldUploadFile.files[0];
 
+    // отображение файла в превью
     reader.onloadend = function () {
       imgOnPreview.src = reader.result;
-
       // изменение мини-превью эффектов
       effectPreview.forEach(function (element) {
         element.style.backgroundImage = 'url(\'' + reader.result + '\')';
