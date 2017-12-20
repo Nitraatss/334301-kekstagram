@@ -3,13 +3,11 @@
 (function () {
 
   window.gallery = {
-    // DOM элементы
-    pictureTemplate: window.data.creatDOMElement(document, '#picture-template').content,
-    pictures: window.data.creatDOMElement(document, '.pictures'),
-    galleryOverlay: window.data.creatDOMElement(document, '.gallery-overlay'),
-    galleryOverlayClose: window.data.creatDOMElement(document, '.gallery-overlay-close'),
+    pictureTemplate: window.data.createDOMElement(document, '#picture-template').content,
+    pictures: window.data.createDOMElement(document, '.pictures'),
+    galleryOverlay: window.data.createDOMElement(document, '.gallery-overlay'),
+    galleryOverlayClose: window.data.createDOMElement(document, '.gallery-overlay-close'),
 
-    // генерация галереи
     generateGallery: function (photosData) {
       var fragment = document.createDocumentFragment();
       while (window.gallery.pictures.firstChild) {
@@ -26,18 +24,13 @@
   };
 
   window.backend.load(
-      // вывод 25 изображений
       function (serverData) {
-        // сохранение иформации о фото в массив
         window.gallery.allPhotos = serverData;
 
-        // отображение фото
         window.gallery.generateGallery(serverData);
 
-        // включение отображения фильтров
         window.galleryFilters.galleryFiltersForm.classList.remove('filters-inactive');
       },
-      // вывод информации об ошибке
       function (errorMessage) {
         window.data.showError(errorMessage);
       }

@@ -2,7 +2,6 @@
 
 (function () {
   window.initializeFilters = {
-    // применение фильтра к определенноиму элементу с определенным значением
     changeTargetFilter: function (target, filterName, filterValue) {
       switch (filterName) {
         case 'effect-chrome':
@@ -25,7 +24,6 @@
           break;
       }
     },
-    // удаление эффекта с элемента
     deleteEffect: function (target, oldEffectName) {
       if (oldEffectName !== null) {
         target.classList.remove(oldEffectName);
@@ -33,32 +31,31 @@
     }
   };
 
-  // создание DOM элемента для изображения с эффектом
   var effectsDOMelements = function (currentEffect) {
     switch (currentEffect) {
       case 'effect-chrome':
-        afterEffectImage = window.data.creatDOMElement(window.form.uploadEffect(), '.effect-chrome');
+        afterEffectImage = window.data.createDOMElement(window.form.uploadEffect(), '.effect-chrome');
         break;
       case 'effect-sepia':
-        afterEffectImage = window.data.creatDOMElement(window.form.uploadEffect(), '.effect-sepia');
+        afterEffectImage = window.data.createDOMElement(window.form.uploadEffect(), '.effect-sepia');
         break;
       case 'effect-marvin':
-        afterEffectImage = window.data.creatDOMElement(window.form.uploadEffect(), '.effect-marvin');
+        afterEffectImage = window.data.createDOMElement(window.form.uploadEffect(), '.effect-marvin');
         break;
       case 'effect-phobos':
-        afterEffectImage = window.data.creatDOMElement(window.form.uploadEffect(), '.effect-phobos');
+        afterEffectImage = window.data.createDOMElement(window.form.uploadEffect(), '.effect-phobos');
         break;
       case 'effect-heat':
-        afterEffectImage = window.data.creatDOMElement(window.form.uploadEffect(), '.effect-heat');
+        afterEffectImage = window.data.createDOMElement(window.form.uploadEffect(), '.effect-heat');
         break;
     }
   };
 
-  var effectControls = window.data.creatDOMElement(window.form.uploadOverlay(), '.upload-effect-controls');
-  var effectsLevel = window.data.creatDOMElement(effectControls, '.upload-effect-level');
-  var effectValue = window.data.creatDOMElement(effectControls, '.upload-effect-level-value');
-  var effectPin = window.data.creatDOMElement(effectControls, '.upload-effect-level-pin');
-  var effectValLine = window.data.creatDOMElement(effectControls, '.upload-effect-level-val');
+  var effectControls = window.data.createDOMElement(window.form.uploadOverlay(), '.upload-effect-controls');
+  var effectsLevel = window.data.createDOMElement(effectControls, '.upload-effect-level');
+  var effectValue = window.data.createDOMElement(effectControls, '.upload-effect-level-value');
+  var effectPin = window.data.createDOMElement(effectControls, '.upload-effect-level-pin');
+  var effectValLine = window.data.createDOMElement(effectControls, '.upload-effect-level-val');
 
   effectValue.disabled = true;
   var maxX;
@@ -66,31 +63,24 @@
   var oldEffect = null;
   var afterEffectImage;
 
-  // перемещение ползунка регулируюещего эффекты
   effectPin.addEventListener('mousedown', function (dEvent) {
     dEvent.preventDefault();
 
-    // задаем стартовые координаты
     var startCoords = {
       X: dEvent.clientX
     };
 
-    // перемещение ползунка
-    var onMouseMove = function (mEvent) {
-      mEvent.preventDefault();
+    var onMouseMove = function (evtMouseMove) {
+      evtMouseMove.preventDefault();
 
-      // расчет смещения
       var move = {
-        moveX: startCoords.X - mEvent.clientX,
+        moveX: startCoords.X - evtMouseMove.clientX,
       };
 
-      // переопределение стартовой позиции
       startCoords = {
-        X: mEvent.clientX,
+        X: evtMouseMove.clientX,
       };
 
-      // смена позиции по мере движения
-      // изменение желтой полоски и инпута с цифрами
       if ((effectPin.offsetLeft - move.moveX) < maxX) {
         if ((effectPin.offsetLeft - move.moveX) > 0) {
           effectPin.style.left = ((effectPin.offsetLeft - move.moveX) * 100) / maxX + '%';
@@ -107,12 +97,11 @@
         effectValLine.style.width = '100%';
       }
 
-      // изменение значений эффектов
       window.initializeFilters.changeTargetFilter(afterEffectImage, effectName, effectValue.value);
     };
 
-    var onMouseUp = function (uEvent) {
-      uEvent.preventDefault();
+    var onMouseUp = function (evtMouseUp) {
+      evtMouseUp.preventDefault();
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
@@ -123,16 +112,15 @@
   }
   );
 
-  // наложение эффектов на фото
   var uploadEffect = window.form.uploadEffect();
   var photoPreview = window.form.effectImagePreview();
 
-  uploadEffect.addEventListener('click', function (eEvent) {
-    if (eEvent.target.type === 'radio') {
+  uploadEffect.addEventListener('click', function (evtClick) {
+    if (evtClick.target.type === 'radio') {
       window.initializeFilters.deleteEffect(photoPreview, oldEffect);
 
       photoPreview.classList = 'effect-image-preview';
-      effectName = eEvent.target.id.substring(7);
+      effectName = evtClick.target.id.substring(7);
       oldEffect = effectName;
       photoPreview.classList.add(effectName);
 
@@ -155,5 +143,4 @@
     }
   }
   );
-
 })();
