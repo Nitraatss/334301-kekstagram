@@ -3,17 +3,14 @@
 (function () {
 
   window.data = {
-    // Возвращает случайное число между min (включительно) и max (не включая max)
     getRandomArbitrary: function (min, max) {
       return Math.floor(Math.random() * (max - min) + min);
     },
 
-    // создание DOM элемента
-    creatDOMElement: function (root, elementName) {
+    createDOMElement: function (root, elementName) {
       return root.querySelector(elementName);
     },
 
-    // форма для сообщения об ошибке
     showError: function (errorMessage) {
       var node = document.createElement('canvas');
       node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: darkred;';
@@ -31,7 +28,7 @@
       ctx.fillStyle = 'white';
       ctx.font = '16px Arial';
       ctx.textBaseline = 'hanging';
-      // Текст сообщения
+
       ctx.fillText(errorMessage, 40, 50);
     },
 

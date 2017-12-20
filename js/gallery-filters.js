@@ -1,9 +1,12 @@
 'use strict';
 
 (function () {
-  // сортировка по количеству лайков
-  var sortByLikes = function (galleryL) {
-    galleryL.sort(function (left, right) {
+  window.galleryFilters = {
+    galleryFiltersForm: window.data.createDOMElement(document, '.filters')
+  };
+
+  var sortByLikes = function (galleryLikes) {
+    galleryLikes.sort(function (left, right) {
       if ((right.likes - left.likes) > 0) {
         return 1;
       } else if (right.likes - left.likes < 0) {
@@ -19,12 +22,11 @@
       }
     });
 
-    window.gallery.generateGallery(galleryL);
+    window.gallery.generateGallery(galleryLikes);
   };
 
-  // сортировка по количеству комметариев
-  var sortByComments = function (galleryC) {
-    galleryC.sort(function (left, right) {
+  var sortByComments = function (galleryComments) {
+    galleryComments.sort(function (left, right) {
       if ((right.comments.length - left.comments.length) > 0) {
         return 1;
       } else if (right.comments.length - left.comments.length < 0) {
@@ -40,17 +42,15 @@
       }
     });
 
-    window.gallery.generateGallery(galleryC);
+    window.gallery.generateGallery(galleryComments);
   };
 
-  // случайная перестановка элементов массива
   var arrayRandomSort = function (arrayR) {
     arrayR.sort(function () {
       return Math.random() - 0.5;
     });
   };
 
-  // устранение дребезга
   var debounce = function (func) {
     var timeout;
 
@@ -64,28 +64,23 @@
     }
   };
 
-  // фильтрация галереи
-  var onFilterChange = function (changeEvent) {
-    var target = changeEvent.target;
+  var onFilterChange = function (evtFilterChange) {
+    var target = evtFilterChange.target;
     var filteredGallery = window.gallery.allPhotos.concat();
 
     if (target === recommended) {
-      // отображение фото по умолчанию
       debounce(function () {
         window.gallery.generateGallery(filteredGallery);
       });
     } else if (target === popular) {
-      // сортировка по лайкам
       debounce(function () {
         sortByLikes(filteredGallery);
       });
     } else if (target === discussed) {
-      // сортировка по комметариям
       debounce(function () {
         sortByComments(filteredGallery);
       });
     } else if (target === random) {
-      // случайная перестановка фото
       debounce(function () {
         arrayRandomSort(filteredGallery);
         window.gallery.generateGallery(filteredGallery);
@@ -93,15 +88,10 @@
     }
   };
 
-  window.galleryFilters = {
-    galleryFiltersForm: window.data.creatDOMElement(document, '.filters')
-  };
-  // DOM элементы формы с фильтрами
-  var recommended = window.data.creatDOMElement(window.galleryFilters.galleryFiltersForm, '#filter-recommend');
-  var popular = window.data.creatDOMElement(window.galleryFilters.galleryFiltersForm, '#filter-popular');
-  var discussed = window.data.creatDOMElement(window.galleryFilters.galleryFiltersForm, '#filter-discussed');
-  var random = window.data.creatDOMElement(window.galleryFilters.galleryFiltersForm, '#filter-random');
+  var recommended = window.data.createDOMElement(window.galleryFilters.galleryFiltersForm, '#filter-recommend');
+  var popular = window.data.createDOMElement(window.galleryFilters.galleryFiltersForm, '#filter-popular');
+  var discussed = window.data.createDOMElement(window.galleryFilters.galleryFiltersForm, '#filter-discussed');
+  var random = window.data.createDOMElement(window.galleryFilters.galleryFiltersForm, '#filter-random');
 
-  // обработчик событий на изменение состояния чекбокса
   window.galleryFilters.galleryFiltersForm.addEventListener('change', onFilterChange);
 })();

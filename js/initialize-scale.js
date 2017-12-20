@@ -2,13 +2,12 @@
 
 (function () {
   window.initializeScale = {
-    // изменение масштаба какго-либо элемента
     changeTargetScale: function (target, newScale) {
       target.style.transform = ('scale(' + (newScale / 100) + ')');
+      resizeValue.value = newScale + '%';
     }
   };
 
-  // увеличение масштаба изображения в форме кадрирования
   var onResizeButtonIncClick = function () {
     var resize = parseInt(resizeValue.value, 10) + 25;
 
@@ -17,10 +16,8 @@
     }
 
     window.initializeScale.changeTargetScale(previewPhoto, resize);
-    resizeValue.value = resize + '%';
   };
 
-  // уменьшение масштаба изображения
   var onResizeButtonDecClick = function () {
     var resize = parseInt(resizeValue.value, 10) - 25;
 
@@ -29,17 +26,14 @@
     }
 
     window.initializeScale.changeTargetScale(previewPhoto, resize);
-    resizeValue.value = resize + '%';
   };
 
   var previewPhoto = window.form.effectImagePreview();
-  var resizeButtonInc = window.data.creatDOMElement(window.form.uploadOverlay(), '.upload-resize-controls-button-inc');
-  var resizeButtonDec = window.data.creatDOMElement(window.form.uploadOverlay(), '.upload-resize-controls-button-dec');
-  var resizeValue = window.data.creatDOMElement(window.form.uploadOverlay(), '.upload-resize-controls-value');
+  var resizeButtonInc = window.data.createDOMElement(window.form.uploadOverlay(), '.upload-resize-controls-button-inc');
+  var resizeButtonDec = window.data.createDOMElement(window.form.uploadOverlay(), '.upload-resize-controls-button-dec');
+  var resizeValue = window.data.createDOMElement(window.form.uploadOverlay(), '.upload-resize-controls-value');
 
-  // увеличение масштаба фото
   resizeButtonInc.addEventListener('click', onResizeButtonIncClick);
 
-  // уменьшение масштаба фото
   resizeButtonDec.addEventListener('click', onResizeButtonDecClick);
 })();

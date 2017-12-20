@@ -2,7 +2,6 @@
 
 (function () {
   window.backend = {
-    // загрузка данных с сервера
     load: function (onLoad, onError) {
       var loadURL = 'https://1510.dump.academy/kekstagram/data';
       var loadXHR = new XMLHttpRequest();
@@ -28,7 +27,6 @@
       loadXHR.open('GET', loadURL);
       loadXHR.send();
     },
-    // сохранение данных на сервер
     save: function (data, onLoad, onError) {
       var saveURL = 'https://1510.dump.academy/kekstagram';
       var saveXHR = new XMLHttpRequest();
