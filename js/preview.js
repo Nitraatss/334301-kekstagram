@@ -42,7 +42,7 @@
 
   var fillGalleryOverlay = function (target, nextSibling) {
     window.data.createDOMElement(window.gallery.galleryOverlay, '.gallery-overlay-image').src = target.src;
-    window.data.createDOMElement(window.gallery.galleryOverlay, '.comments-count').textContent = window.data.createDOMElement(nextSibling, '.picture-comments').textContent.split('  ').length;
+    window.data.createDOMElement(window.gallery.galleryOverlay, '.comments-count').textContent = window.data.createDOMElement(nextSibling, '.picture-comments').textContent;
     window.data.createDOMElement(window.gallery.galleryOverlay, '.likes-count').textContent = window.data.createDOMElement(nextSibling, '.picture-likes').textContent;
   };
 
