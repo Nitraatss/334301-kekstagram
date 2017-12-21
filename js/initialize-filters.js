@@ -117,13 +117,12 @@
         effectValLine.style.width = '20%';
         effectValue.value = '20';
         maxX = effectPin.offsetLeft * 5;
-
-        window.initializeFilters.changeTargetFilter(afterEffectImage, effectName, effectValue.value);
       } else {
         effectsLevel.classList.add('hidden');
         photoPreview.classList.remove(effectName);
-        window.initializeFilters.changeTargetFilter(afterEffectImage, effectName, effectValue.value);
       }
+
+      window.initializeFilters.changeTargetFilter(afterEffectImage, effectName, effectValue.value);
     }
   };
 
