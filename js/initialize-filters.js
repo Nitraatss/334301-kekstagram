@@ -51,19 +51,7 @@
     }
   };
 
-  var effectControls = window.data.createDOMElement(window.form.uploadOverlay(), '.upload-effect-controls');
-  var effectsLevel = window.data.createDOMElement(effectControls, '.upload-effect-level');
-  var effectValue = window.data.createDOMElement(effectControls, '.upload-effect-level-value');
-  var effectPin = window.data.createDOMElement(effectControls, '.upload-effect-level-pin');
-  var effectValLine = window.data.createDOMElement(effectControls, '.upload-effect-level-val');
-
-  effectValue.disabled = true;
-  var maxX;
-  var effectName;
-  var oldEffect = null;
-  var afterEffectImage;
-
-  effectPin.addEventListener('mousedown', function (dEvent) {
+  var onEffectPinMouseDown = function (dEvent) {
     dEvent.preventDefault();
 
     var startCoords = {
@@ -109,13 +97,9 @@
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
-  }
-  );
+  };
 
-  var uploadEffect = window.form.uploadEffect();
-  var photoPreview = window.form.effectImagePreview();
-
-  uploadEffect.addEventListener('click', function (evtClick) {
+  var onUploadEffectClick = function (evtClick) {
     if (evtClick.target.type === 'radio') {
       window.initializeFilters.deleteEffect(photoPreview, oldEffect);
 
@@ -141,6 +125,24 @@
         window.initializeFilters.changeTargetFilter(afterEffectImage, effectName, effectValue.value);
       }
     }
-  }
-  );
+  };
+
+  var effectControls = window.data.createDOMElement(window.form.uploadOverlay(), '.upload-effect-controls');
+  var effectsLevel = window.data.createDOMElement(effectControls, '.upload-effect-level');
+  var effectValue = window.data.createDOMElement(effectControls, '.upload-effect-level-value');
+  var effectPin = window.data.createDOMElement(effectControls, '.upload-effect-level-pin');
+  var effectValLine = window.data.createDOMElement(effectControls, '.upload-effect-level-val');
+
+  effectValue.disabled = true;
+  var maxX;
+  var effectName;
+  var oldEffect = null;
+  var afterEffectImage;
+
+  effectPin.addEventListener('mousedown', onEffectPinMouseDown);
+
+  var uploadEffect = window.form.uploadEffect();
+  var photoPreview = window.form.effectImagePreview();
+
+  uploadEffect.addEventListener('click', onUploadEffectClick);
 })();

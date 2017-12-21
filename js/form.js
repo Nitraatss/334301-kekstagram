@@ -130,32 +130,20 @@
     return errors;
   };
 
-  var uploadForm = window.form.formUploadSelectImage();
-  var fieldUploadFile = window.data.createDOMElement(uploadForm, '#upload-file');
-  var uploadCancel = window.data.createDOMElement(window.form.uploadOverlay(), '.upload-form-cancel');
-  var uploadSubmit = window.data.createDOMElement(window.form.uploadOverlay(), '.upload-form-submit');
-  var uploadDescription = window.data.createDOMElement(window.form.uploadOverlay(), '.upload-form-description');
-  var uploadHashtags = window.data.createDOMElement(window.form.uploadOverlay(), '.upload-form-hashtags');
-  var uploadFormPreview = window.data.createDOMElement(window.form.uploadOverlay(), '.upload-form-preview');
-  var imgOnPreview = window.data.createDOMElement(uploadFormPreview, 'img');
-  var effectPreview = document.querySelectorAll('.upload-effect-preview');
-
-  uploadForm.dropzone = 'move';
-
-  uploadForm.addEventListener('dragover', function (evtDragover) {
+  var onDragOverUploadForm = function (evtDragover) {
     evtDragover.preventDefault();
     return false;
-  });
+  };
 
-  uploadForm.addEventListener('drop', function (evtDrop) {
+  var onDropOnUlpoadFrom = function (evtDrop) {
     evtDrop.preventDefault();
 
     if (evtDrop.dataTransfer.files) {
       fieldUploadFile.files = evtDrop.dataTransfer.files;
     }
-  });
+  };
 
-  fieldUploadFile.addEventListener('change', function () {
+  var onChangeFieldUploadFile = function () {
     showUploadOverlay();
     var reader = new FileReader();
     var file = fieldUploadFile.files[0];
@@ -170,6 +158,22 @@
     if (file) {
       reader.readAsDataURL(file);
     }
-  });
+  };
+
+  var uploadForm = window.form.formUploadSelectImage();
+  var fieldUploadFile = window.data.createDOMElement(uploadForm, '#upload-file');
+  var uploadCancel = window.data.createDOMElement(window.form.uploadOverlay(), '.upload-form-cancel');
+  var uploadSubmit = window.data.createDOMElement(window.form.uploadOverlay(), '.upload-form-submit');
+  var uploadDescription = window.data.createDOMElement(window.form.uploadOverlay(), '.upload-form-description');
+  var uploadHashtags = window.data.createDOMElement(window.form.uploadOverlay(), '.upload-form-hashtags');
+  var uploadFormPreview = window.data.createDOMElement(window.form.uploadOverlay(), '.upload-form-preview');
+  var imgOnPreview = window.data.createDOMElement(uploadFormPreview, 'img');
+  var effectPreview = document.querySelectorAll('.upload-effect-preview');
+
+  uploadForm.dropzone = 'move';
+
+  uploadForm.addEventListener('dragover', onDragOverUploadForm);
+  uploadForm.addEventListener('drop', onDropOnUlpoadFrom);
+  fieldUploadFile.addEventListener('change', onChangeFieldUploadFile);
 }
 )();
