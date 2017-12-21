@@ -3,10 +3,6 @@
 (function () {
 
   window.data = {
-    getRandomArbitrary: function (min, max) {
-      return Math.floor(Math.random() * (max - min) + min);
-    },
-
     createDOMElement: function (root, elementName) {
       return root.querySelector(elementName);
     },

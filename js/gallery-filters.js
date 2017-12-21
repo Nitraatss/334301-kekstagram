@@ -2,7 +2,7 @@
 
 (function () {
   window.galleryFilters = {
-    galleryFiltersForm: window.data.createDOMElement(document, '.filters')
+    filters: window.data.createDOMElement(document, '.filters')
   };
 
   var sortByLikes = function (galleryLikes) {
@@ -11,14 +11,10 @@
         return 1;
       } else if (right.likes - left.likes < 0) {
         return -1;
+      } else if (sortBySrc(left, right)) {
+        return sortBySrc();
       } else {
-        if (left.src > right.src) {
-          return 1;
-        } else if (left.src < right.src) {
-          return -1;
-        } else {
-          return 0;
-        }
+        return 0;
       }
     });
 
@@ -31,18 +27,24 @@
         return 1;
       } else if (right.comments.length - left.comments.length < 0) {
         return -1;
+      } else if (sortBySrc(left, right)) {
+        return sortBySrc();
       } else {
-        if (left.src > right.src) {
-          return 1;
-        } else if (left.src < right.src) {
-          return -1;
-        } else {
-          return 0;
-        }
+        return 0;
       }
     });
 
     window.gallery.generateGallery(galleryComments);
+  };
+
+  var sortBySrc = function (leftItem, rightItem) {
+    if (leftItem.src > rightItem.src) {
+      return 1;
+    } else if (leftItem.src < rightItem.src) {
+      return -1;
+    } else {
+      return null;
+    }
   };
 
   var arrayRandomSort = function (arrayR) {
@@ -88,10 +90,10 @@
     }
   };
 
-  var recommended = window.data.createDOMElement(window.galleryFilters.galleryFiltersForm, '#filter-recommend');
-  var popular = window.data.createDOMElement(window.galleryFilters.galleryFiltersForm, '#filter-popular');
-  var discussed = window.data.createDOMElement(window.galleryFilters.galleryFiltersForm, '#filter-discussed');
-  var random = window.data.createDOMElement(window.galleryFilters.galleryFiltersForm, '#filter-random');
+  var recommended = window.data.createDOMElement(window.galleryFilters.filters, '#filter-recommend');
+  var popular = window.data.createDOMElement(window.galleryFilters.filters, '#filter-popular');
+  var discussed = window.data.createDOMElement(window.galleryFilters.filters, '#filter-discussed');
+  var random = window.data.createDOMElement(window.galleryFilters.filters, '#filter-random');
 
-  window.galleryFilters.galleryFiltersForm.addEventListener('change', onFilterChange);
+  window.galleryFilters.filters.addEventListener('change', onFilterChange);
 })();

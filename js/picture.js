@@ -2,7 +2,7 @@
 
 (function () {
   window.picture = {
-    generatePhoto: function (data) {
+    generate: function (data) {
       var picture = window.gallery.pictureTemplate.cloneNode(true);
       var pictureComments = window.data.createDOMElement(picture, '.picture-comments');
       pictureComments.textContent = data.comments[0];

@@ -15,7 +15,7 @@
       }
 
       for (var l = 0; l < 25; l++) {
-        fragment.appendChild(window.picture.generatePhoto(photosData[l]));
+        fragment.appendChild(window.picture.generate(photosData[l]));
       }
       window.gallery.pictures.appendChild(fragment);
     },
@@ -29,7 +29,7 @@
 
         window.gallery.generateGallery(serverData);
 
-        window.galleryFilters.galleryFiltersForm.classList.remove('filters-inactive');
+        window.galleryFilters.filters.classList.remove('filters-inactive');
       },
       function (errorMessage) {
         window.data.showError(errorMessage);

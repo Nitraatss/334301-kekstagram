@@ -2,7 +2,7 @@
 
 (function () {
   window.initializeScale = {
-    changeTargetScale: function (target, newScale) {
+    changeScale: function (target, newScale) {
       target.style.transform = ('scale(' + (newScale / 100) + ')');
       resizeValue.value = newScale + '%';
     }
@@ -15,7 +15,7 @@
       resize = 100;
     }
 
-    window.initializeScale.changeTargetScale(previewPhoto, resize);
+    window.initializeScale.changeScale(previewPhoto, resize);
   };
 
   var onResizeButtonDecClick = function () {
@@ -25,7 +25,7 @@
       resize = 25;
     }
 
-    window.initializeScale.changeTargetScale(previewPhoto, resize);
+    window.initializeScale.changeScale(previewPhoto, resize);
   };
 
   var previewPhoto = window.form.effectImagePreview();

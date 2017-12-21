@@ -18,7 +18,7 @@
 
   var showUploadOverlay = function () {
     window.form.uploadOverlay().classList.remove('hidden');
-    window.initializeScale.changeTargetScale(window.form.effectImagePreview(), 100);
+    window.initializeScale.changeScale(window.form.effectImagePreview(), 100);
     window.data.createDOMElement(document, '#upload-effect-none').checked = true;
     window.data.createDOMElement(document, '.upload-effect-level').classList.add('hidden');
 
